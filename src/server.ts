@@ -3,6 +3,7 @@ import { listBooks } from './catalog.js';
 import { OutOfStockError } from './inventory.js';
 import { createOrder, getOrder, InvalidOrderError } from './orders.js';
 import { UnknownSkuError } from './pricing.js';
+import { formatCents } from './utils/money.js';
 
 function send(res: ServerResponse, status: number, body: unknown): void {
   res.writeHead(status, { 'content-type': 'application/json' });
@@ -19,7 +20,11 @@ export async function handle(req: IncomingMessage, res: ServerResponse): Promise
   const url = new URL(req.url ?? '/', 'http://localhost');
   try {
     if (req.method === 'GET' && url.pathname === '/books') {
-      return send(res, 200, listBooks());
+      return send(
+        res,
+        200,
+        listBooks().map((b) => ({ ...b, price: formatCents(b.priceCents) })),
+      );
     }
     if (req.method === 'POST' && url.pathname === '/orders') {
       const body = (await readJson(req)) as { items?: unknown };
