@@ -4,7 +4,7 @@ import { InvalidDiscountError } from './discounts.js';
 import { OutOfStockError } from './inventory.js';
 import { cancelOrder, createOrder, getOrder, InvalidOrderError, OrderNotFoundError } from './orders.js';
 import { UnknownSkuError } from './pricing.js';
-import { formatCents } from './utils/money.js';
+import { formatCents } from './money.js';
 
 function send(res: ServerResponse, status: number, body: unknown): void {
   res.writeHead(status, { 'content-type': 'application/json' });
