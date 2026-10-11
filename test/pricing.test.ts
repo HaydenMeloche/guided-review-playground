@@ -5,6 +5,7 @@ describe('pricing', () => {
   it('sums line items and adds tax', () => {
     expect(quote([{ sku: 'BK-001', quantity: 2 }])).toEqual({
       subtotalCents: 8598,
+      discountCents: 0,
       taxCents: 1118,
       totalCents: 9716,
     });

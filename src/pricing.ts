@@ -1,4 +1,5 @@
 import { findBook } from './catalog.js';
+import { discountAmount } from './discounts.js';
 import type { LineItem } from './types.js';
 
 export const TAX_RATE = 0.13;
@@ -23,8 +24,14 @@ export function tax(subtotalCents: number): number {
   return Math.round(subtotalCents * TAX_RATE);
 }
 
-export function quote(items: LineItem[]) {
+export function quote(items: LineItem[], discountCode?: string) {
   const subtotalCents = subtotal(items);
+  const discountCents = discountCode ? discountAmount(discountCode, subtotalCents) : 0;
   const taxCents = tax(subtotalCents);
-  return { subtotalCents, taxCents, totalCents: subtotalCents + taxCents };
+  return {
+    subtotalCents,
+    discountCents,
+    taxCents,
+    totalCents: subtotalCents - discountCents + taxCents,
+  };
 }
