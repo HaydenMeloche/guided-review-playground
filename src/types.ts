@@ -10,14 +10,17 @@ export interface LineItem {
   quantity: number;
 }
 
-export type OrderStatus = 'placed' | 'shipped';
+export type OrderStatus = 'placed' | 'shipped' | 'cancelled';
 
 export interface Order {
   id: string;
   items: LineItem[];
   subtotalCents: number;
+  discountCode?: string;
+  discountCents: number;
   taxCents: number;
   totalCents: number;
   status: OrderStatus;
   createdAt: Date;
+  cancelledAt?: Date;
 }
