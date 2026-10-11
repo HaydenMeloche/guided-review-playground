@@ -4,5 +4,10 @@
   "taxRate": 0.13,
   "inventory": {
     "lowStockThreshold": 2
+  },
+  "discounts": {
+    "enabled": true,
+    "maxPercent": 50,
+    "stackable": false
   }
 }
