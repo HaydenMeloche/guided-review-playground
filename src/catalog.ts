@@ -16,3 +16,9 @@ export function listBooks(): Book[] {
 export function findBook(sku: string): Book | undefined {
   return bySku.get(sku);
 }
+
+export class UnknownSkuError extends Error {
+  constructor(readonly sku: string) {
+    super(`Unknown SKU ${sku}`);
+  }
+}

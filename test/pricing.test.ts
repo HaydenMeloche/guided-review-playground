@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { quote, tax, UnknownSkuError } from '../src/pricing.js';
+import { UnknownSkuError } from '../src/catalog.js';
+import { quote, tax } from '../src/pricing.js';
 
 describe('pricing', () => {
   it('sums line items and adds tax', () => {

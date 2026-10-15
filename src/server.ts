@@ -1,19 +1,12 @@
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
-import { listBooks } from './catalog.js';
+import { listBooks, UnknownSkuError } from './catalog.js';
 import { OutOfStockError } from './inventory.js';
 import { createOrder, getOrder, InvalidOrderError } from './orders.js';
-import { UnknownSkuError } from './pricing.js';
 import { formatCents } from './utils/money.js';
 
 function send(res: ServerResponse, status: number, body: unknown): void {
   res.writeHead(status, { 'content-type': 'application/json' });
   res.end(JSON.stringify(body));
-}
-
-async function readJson(req: IncomingMessage): Promise<unknown> {
-  const chunks: Buffer[] = [];
-  for await (const chunk of req) chunks.push(chunk as Buffer);
-  return JSON.parse(Buffer.concat(chunks).toString('utf8'));
 }
 
 export async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> {
@@ -44,6 +37,12 @@ export async function handle(req: IncomingMessage, res: ServerResponse): Promise
     if (err instanceof OutOfStockError) return send(res, 409, { error: err.message });
     send(res, 500, { error: 'internal error' });
   }
+}
+
+async function readJson(req: IncomingMessage): Promise<unknown> {
+  const chunks: Buffer[] = [];
+  for await (const chunk of req) chunks.push(chunk as Buffer);
+  return JSON.parse(Buffer.concat(chunks).toString('utf8'));
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
